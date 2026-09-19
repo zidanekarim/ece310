@@ -5,7 +5,8 @@ import soundfile
 from utilities import plot_dtft, fir_bpf, fir_lpf
 import matplotlib
 
-matplotlib.use('QtAgg') 
+matplotlib.use('QtAgg')     # because i ran this in a venv
+
 
 M_vals = (10, 100, 1000, 10000)
 #M_vals =(1000000000,) for some reason this crashed my VSCode!
@@ -13,13 +14,12 @@ M_vals = (10, 100, 1000, 10000)
 
 wc = np.pi / 150 # 0.0196 rad/s, using w bc it seems the plot_dtft operates in rad/s
 
-# for M in M_vals:
-#     # because i ran this in a venv
-#     n = np.arange(-M, M+1, 1) # arange bc discrete points. Also hate that this is called arange over arrange
-#     # closed form analytical expression, sin(wc*n) / pi*n
-#     h = np.where(n == 0, wc / np.pi, np.sin(wc * n) / (np.pi * n)) # Given: treat h[0] as wc/pi. so no division by n will even occur (ignore runtime warning)
+for M in M_vals:
+    n = np.arange(-M, M+1, 1) # arange bc discrete points. Also hate that this is called arange over arrange
+    # closed form analytical expression, sin(wc*n) / pi*n
+    h = np.where(n == 0, wc / np.pi, np.sin(wc * n) / (np.pi * n)) # Given: treat h[0] as wc/pi. so no division by n will even occur (ignore runtime warning)
 
-#     plot_dtft(h)
+    plot_dtft(h)
 
 
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     
     print(f"Initial sampling rate of {filename} is {sampling_rate/1000} kHz")
 
-    equalized = equalize(data, sampling_rate, 300, 10, 1, 8)
+    equalized = equalize(data, sampling_rate, 300, 5, 5, 5)
     resampled = resample(equalized, 147, 160, 1000)
 
 
