@@ -12,7 +12,7 @@ M_vals = (10, 100, 1000, 10000)
 #M_vals =(1000000000,) for some reason this crashed my VSCode!
 #M_vals =(10000000,)
 
-wc = np.pi / 150 # 0.0196 rad/s, using w bc it seems the plot_dtft operates in rad/s
+wc = np.pi / 160 # 0.0196 rad/s, using w bc it seems the plot_dtft operates in rad/s
 
 for M in M_vals:
     n = np.arange(-M, M+1, 1) # arange bc discrete points. Also hate that this is called arange over arrange
