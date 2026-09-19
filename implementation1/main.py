@@ -14,12 +14,13 @@ M_vals = (10, 100, 1000, 10000)
 
 wc = np.pi / 160 # 0.0196 rad/s, using w bc it seems the plot_dtft operates in rad/s
 
-for M in M_vals:
-    n = np.arange(-M, M+1, 1) # arange bc discrete points. Also hate that this is called arange over arrange
-    # closed form analytical expression, sin(wc*n) / pi*n
-    h = np.where(n == 0, wc / np.pi, np.sin(wc * n) / (np.pi * n)) # Given: treat h[0] as wc/pi. so no division by n will even occur (ignore runtime warning)
+if False: # disabled for output
+    for M in M_vals:
+        n = np.arange(-M, M+1, 1) # arange bc discrete points. Also hate that this is called arange over arrange
+        # closed form analytical expression, sin(wc*n) / pi*n
+        h = np.where(n == 0, wc / np.pi, np.sin(wc * n) / (np.pi * n)) # Given: treat h[0] as wc/pi. so no division by n will even occur (ignore runtime warning)
 
-    plot_dtft(h)
+        plot_dtft(h)
 
 
 
@@ -46,6 +47,8 @@ def equalize(x, fs, M, g_low, g_mid, g_high):
     wh = 2*pi* (20000 / fs) # frequencies from assignment chart
 
     h_low = fir_lpf(wl, M, gain=1)
+    if True:
+        plot_dtft(h_low)
 
     # now we need a filter that passes btwn 300Hz and 2kHz, but fir_lpf centers at 0hz and has a span from -wc to wc
     # calculate new center freq -> (300 + 2000) / 2  = 1150 Hz. our BPF function expects this frequency 
@@ -54,11 +57,14 @@ def equalize(x, fs, M, g_low, g_mid, g_high):
     w_center_mid = (wl + wm) / 2 
     w_cutoff_mid = (wm - wl) / 2 
     h_mid = fir_bpf(fir_lpf(w_cutoff_mid, M, 1), w_center_mid, M)
+    if True:
+        plot_dtft(h_mid)
 
     w_center_high = (wm + wh) / 2 
     w_cutoff_high = (wh - wm) / 2 
     h_high = fir_bpf(fir_lpf(w_cutoff_high, M, 1), w_center_high, M)
-
+    if True:
+        plot_dtft(h_high)
 
     y_low = scipy.signal.lfilter(h_low, [1.0], x, axis=0)
     y_mid = scipy.signal.lfilter(h_mid, [1.0], x, axis=0)
