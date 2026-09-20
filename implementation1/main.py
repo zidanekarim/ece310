@@ -14,7 +14,7 @@ M_vals = (10, 100, 1000, 10000)
 
 wc = np.pi / 160 # 0.0196 rad/s, using w bc it seems the plot_dtft operates in rad/s
 
-if False: # disabled for output
+if True: # disabled for output
     for M in M_vals:
         n = np.arange(-M, M+1, 1) # arange bc discrete points. Also hate that this is called arange over arrange
         # closed form analytical expression, sin(wc*n) / pi*n
@@ -47,7 +47,7 @@ def equalize(x, fs, M, g_low, g_mid, g_high):
     wh = 2*pi* (20000 / fs) # frequencies from assignment chart
 
     h_low = fir_lpf(wl, M, gain=1)
-    if True:
+    if False:
         plot_dtft(h_low)
 
     # now we need a filter that passes btwn 300Hz and 2kHz, but fir_lpf centers at 0hz and has a span from -wc to wc
@@ -57,13 +57,13 @@ def equalize(x, fs, M, g_low, g_mid, g_high):
     w_center_mid = (wl + wm) / 2 
     w_cutoff_mid = (wm - wl) / 2 
     h_mid = fir_bpf(fir_lpf(w_cutoff_mid, M, 1), w_center_mid, M)
-    if True:
+    if False:
         plot_dtft(h_mid)
 
     w_center_high = (wm + wh) / 2 
     w_cutoff_high = (wh - wm) / 2 
     h_high = fir_bpf(fir_lpf(w_cutoff_high, M, 1), w_center_high, M)
-    if True:
+    if False:
         plot_dtft(h_high)
 
     y_low = scipy.signal.lfilter(h_low, [1.0], x, axis=0)
