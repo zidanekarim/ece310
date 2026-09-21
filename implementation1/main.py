@@ -87,7 +87,7 @@ if __name__ == '__main__':
     data, sampling_rate = soundfile.read(filename)
     if data.ndim > 1:
         data = data.mean(axis=1)
-    data = data.astype(np.float32)
+    data = (data.astype(np.float32))[:20*sampling_rate]
     
     print(f"Initial sampling rate of {filename} is {sampling_rate/1000} kHz")
 
