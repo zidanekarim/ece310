@@ -6,7 +6,7 @@ from utilities import plot_dtft
 import soundfile
 
 path = "./audio/"
-i = 5
+i = 1
 data = scipy.io.loadmat(path + f"baseband{i}.mat")
 #print(data.keys())
 data = np.asarray(data["data"]).squeeze()
@@ -18,7 +18,7 @@ group_delay = M/2
 
 def limiter(data):
     magnitude = np.abs(data)
-    return np.where(magnitude > 1, data / magnitude, data) # normalized to prevent blowup
+    return magnitude/data # normalized to prevent blowup
 
 
 # sampling freq is 256 khz
