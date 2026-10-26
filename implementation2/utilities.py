@@ -13,7 +13,7 @@ def plot_dtft(x):
 
     _, ax = plt.subplots(nrows=1, ncols=1, tight_layout=True)
     mag_ax = ax
-    mag_ax.plot(w, np.abs(X), label=f'Case M={len(x)//2}')
+    mag_ax.plot(w, np.abs(X), label='Magnitude')
     mag_ax.legend() # added this
     mag_ax.set_xticks(
         [-np.pi, -3*np.pi/4, -np.pi/2, -np.pi/4, 0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi],

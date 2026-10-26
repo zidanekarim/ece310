@@ -1,9 +1,14 @@
+
 import numpy as np
+import matplotlib
+matplotlib.use('QtAgg') 
+
 import matplotlib.pyplot as plt
 import scipy
 import scipy.signal as signal
 from utilities import plot_dtft
 import soundfile
+
 
 path = "./audio/"
 i = 1
@@ -33,13 +38,17 @@ f_d = wd / (2 * np.pi) # normalized freq
 h = signal.remez(
     M + 1,
     [0, f_d],
-    [1],
+    [2*np.pi],
     type="differentiator",
     fs=1
 )
+
+plot_dtft(h)
+
 print(f"Group delay: {group_delay} samples")
 #print("Filter coefficients h[n]:\n", h)
 
+plot_dtft(limiter(data))
 
 conjugate = np.conj(limiter(data))
 # now apply delay to the conjugate signal
@@ -57,14 +66,23 @@ a = [1, (1 - 150e-6*fs)/(1 + 150e-6*fs)]
 
 y = signal.lfilter(b, a, y_n)
 
+plot_dtft(y)
+
 f_pass = 15e3
 f_stop = 18e3 # we want to stop before the 19khz so we dont get the pilot tone. 19 < 23 so by doing this we already filter out stereo. 
 M_lpf = 300
 lpf = signal.remez(M_lpf+1, [0, f_pass, f_stop, fs/2], [1, 0], weight=[1,10], fs=fs)
 
+plot_dtft(lpf)
+
 y_lpf = signal.lfilter(lpf, 1, y)
 y_out = y_lpf[::4] # decimate by 4 to get 64kHz output
 
+plot_dtft(y_out)
 
+
+max_val = np.max(np.abs(y_out))
+if max_val > 0:
+    y_out = 0.99 * (y_out / max_val)
  
 soundfile.write("output.wav", y_out, 64000, subtype='PCM_16') # from soundfile docs, default subtype for WAV files
