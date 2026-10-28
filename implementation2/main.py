@@ -11,12 +11,12 @@ import soundfile
 
 
 path = "./audio/"
-i = 1
+i = 5
 data = scipy.io.loadmat(path + f"baseband{i}.mat")
 #print(data.keys())
 data = np.asarray(data["data"]).squeeze()
 # FIR differentiator 
-
+plot_dtft(data)
 M = 50
 # group delay => M/2 = 25
 group_delay = M/2
@@ -71,7 +71,7 @@ plot_dtft(y)
 f_pass = 15e3
 f_stop = 18e3 # we want to stop before the 19khz so we dont get the pilot tone. 19 < 23 so by doing this we already filter out stereo. 
 M_lpf = 300
-lpf = signal.remez(M_lpf+1, [0, f_pass, f_stop, fs/2], [1, 0], weight=[1,10], fs=fs)
+lpf = signal.remez(M_lpf+1, [0, f_pass, f_stop, fs/2], [1, 0], fs=fs) # also, we can use weight argument to emphasize the stopband more, but i avoided that for now.
 
 plot_dtft(lpf)
 
